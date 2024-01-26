@@ -10,33 +10,10 @@ BLEService customService("20336bc0-c8f9-4de7-b637-a68b7ef33fc9");  // 1816 is th
 BLECharacteristic dataCharacteristic("23336bc0-c8f9-4de7-b637-a68b7ef33fc9",  // Custom characteristic UUID
                                    BLERead | BLENotify | BLEWrite, 
                                    CHARACTERISTIC_SIZE);  // Characteristic value length
-// dataCharacteristic.setWriteType(BLEWrite);
-// BLECharacteristic tempCharacteristic("845efa95-b66f-4a4e-94d2-d115a0e62074",  // Custom characteristic UUID
-//                                    BLERead | BLENotify, 
-//                                    CHARACTERISTIC_SIZE);  // Characteristic value length
 
-// BLECharacteristic humidityCharacteristic("87214acd-c623-4ca1-be44-958b10d7f4a6",  // Custom characteristic UUID
-//                                    BLERead | BLENotify, 
-//                                    CHARACTERISTIC_SIZE);  // Characteristic value length
-
-// BLECharacteristic lightCharacteristic("242811be-4365-49ea-9526-9e57bb1ba371",  // Custom characteristic UUID
-//                                    BLERead | BLENotify, 
-//                                    CHARACTERISTIC_SIZE);  // Characteristic value length
-
-// BLECharacteristic solenoidCharacteristic("6217b278-33c5-4c47-baf6-bf92952b0cb8",  // Custom characteristic UUID
-//                                    BLERead | BLENotify, 
-//                                    CHARACTERISTIC_SIZE);  // Characteristic value length
-
-// BLECharacteristic waterCharacteristic("be52316f-4b76-49c4-b033-6d3108a9d129",  // Custom characteristic UUID
-//                                    BLERead | BLENotify, 
-//                                    CHARACTERISTIC_SIZE);  // Characteristic value length
 
 BLEDescriptor dataDescriptor("00002902-0000-1000-8000-00805f9b34fb", "All data");  // Used for enabling notifications.
-// BLEDescriptor waterDescriptor("e6fa694e-c959-4b0f-9460-2773283c08f2", "Water Level");  // Used for enabling notifications.
-// BLEDescriptor tempDescriptor("f7dd640b-1f4e-4c59-8ad9-ebc3e6ef9cbf", "Temperature");  // Used for enabling notifications.
-// BLEDescriptor humidityDescriptor("194fc316-6d1d-4747-8b13-088c224164e5", "Humidity");  // Used for enabling notifications.
-// BLEDescriptor solenoidDescriptor("a685a1da-7f3b-4900-ae93-4b67cd8d640b", "Solenoid");  // Used for enabling notifications.
-// BLEDescriptor lightDescriptor("be62f4be-529d-4e88-8d5e-845c403a1ab1", "Light Level");  // Used for enabling notifications.
+
 
 uint8_t packet[CHARACTERISTIC_SIZE];
 const int soilMoistureReadPin = 32;
@@ -73,17 +50,9 @@ void setup() {
   BLE.setAdvertisedService(customService);
   // Add custom characteristic
   customService.addCharacteristic(dataCharacteristic);
-  // customService.addCharacteristic(waterCharacteristic);
-  // customService.addCharacteristic(tempCharacteristic);
-  // customService.addCharacteristic(humidityCharacteristic);
-  // customService.addCharacteristic(solenoidCharacteristic);
-  // customService.addCharacteristic(lightCharacteristic);
+
   dataCharacteristic.addDescriptor(dataDescriptor);
-  // waterCharacteristic.addDescriptor(waterDescriptor);
-  // tempCharacteristic.addDescriptor(tempDescriptor);
-  // humidityCharacteristic.addDescriptor(humidityDescriptor);
-  // solenoidCharacteristic.addDescriptor(solenoidDescriptor);
-  // lightCharacteristic.addDescriptor(lightDescriptor);
+
   BLE.addService(customService);
   
   // Start advertising
@@ -101,16 +70,6 @@ void loop() {
     Serial.println(central.address());
     String concat = "";
     while (central.connected()) {
-      // initialize packet data array
-      // const uint8_t* currentData = dataCharacteristic.value();
-      // uint8_t data = *currentData;
-      // for(int i = 0; i < dataCharacteristic.valueLength(); i++){
-      //   data = currentData[i];
-      //   Serial.print(data);
-      //   Serial.print(", ");
-      // }
-      // Serial.print("Data: ");
-      // Serial.println(data);
       if (dataCharacteristic.written()) {
         // Read the received data
         Serial.println("made it here");
@@ -129,10 +88,7 @@ void loop() {
         digitalWrite(solenoid, HIGH);
         delay(wateringTime);
         digitalWrite(solenoid,LOW);
-        // Serial.println();
-        // Serial.println(receivedData.c_str());
-        // Process the received data as needed
-        // Add your code here to handle the received data
+
       }
       delay(100);
       digitalWrite(soilMoisturePowerPin, HIGH);
